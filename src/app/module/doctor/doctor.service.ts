@@ -34,19 +34,19 @@ const getDoctorById = async (id: string) => {
                     specialty: true
                 }
             },
-            // appointments: {
-            //     include: {
-            //         patient: true,
-            //         schedule: true,
-            //         prescription: true,
-            //     }
-            // },
-            // doctorSchedules: {
-            //     include: {
-            //         schedule: true,
-            //     }
-            // },
-            // reviews: true
+            appointments: {
+                include: {
+                    patient: true,
+                    schedule: true,
+                    prescription: true,
+                }
+            },
+            doctorSchedules: {
+                include: {
+                    schedule: true,
+                }
+            },
+            reviews: true
         }
     })
     return doctor;
