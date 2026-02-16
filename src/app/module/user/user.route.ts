@@ -1,8 +1,10 @@
 import { Router } from "express";
 // import { NextFunction, Request, Response } from "express";
 import { UserController } from "./user.controller";
-import { createDoctorZodSchema } from "./user.validation";
+import { UserValidation } from "./user.validation";
 import { validateRequest } from "../../middleware/validateRequest";
+// import { checkAuth } from "../../middleware/checkAuth";
+// import { checkAuth } from "../../middleware/checkAuth";
 
 
 
@@ -28,9 +30,22 @@ router.post("/create-doctor",
 
     // }, 
 
-    validateRequest(createDoctorZodSchema),
+    validateRequest(UserValidation.createDoctorValidationSchema),
 
     UserController.createDoctor);
+
+
+    router.post(
+  "/create-admin",
+//   checkAuth("SUPER_ADMIN"), // Only super admin can create admin
+  validateRequest(UserValidation.createAdminValidationSchema),
+  UserController.createAdmin,
+);
+
+
+
+
+
 // router.post("/create-admin", UserController.createDoctor);
 // router.post("/create-superadmin", UserController.createDoctor);
 
