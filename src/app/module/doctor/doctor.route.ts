@@ -2,13 +2,13 @@ import { Router } from "express";
 import { DoctorController } from "./doctor.controller";
 import { updateDoctorZodSchema } from "./doctor.validation";
 import { validateRequest } from "../../middleware/validateRequest";
-// import { checkAuth } from "../../middleware/checkAuth";
-// import { Role } from "../../../generated/enums";
+import { checkAuth } from "../../middleware/checkAuth";
+import { Role } from "../../../generated/enums";
 
 const router = Router();
 
 router.get("/",
-    // checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+    checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
    DoctorController.getAllDoctors);
 
 router.get("/:id",
