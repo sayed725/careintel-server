@@ -4,8 +4,11 @@ import { prisma } from "./prisma";
 import { Role, UserStatus } from "../../generated/enums";
 import { bearer, emailOTP } from "better-auth/plugins";
 import { sendEmail } from "../utils/email";
+import { envVars } from "../../config/env";
 
 export const auth = betterAuth({
+  baseURL: envVars.BETTER_AUTH_URL,
+  secret: envVars.BETTER_AUTH_SECRET,
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
@@ -13,6 +16,24 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+  },
+
+  socialProviders: {
+    google: {
+      clientId: envVars.GOOGLE_CLIENT_ID,
+      clientSecret: envVars.GOOGLE_CLIENT_SECRET,
+      // callbackUrl: envVars.GOOGLE_CALLBACK_URL,
+      mapProfileToUser: () => {
+        return {
+          role: Role.PATIENT,
+          status: UserStatus.ACTIVE,
+          needPasswordChange: false,
+          emailVerified: true,
+          isDeleted: false,
+          deletedAt: null,
+        };
+      },
+    },
   },
 
   emailVerification: {
@@ -79,15 +100,14 @@ export const auth = betterAuth({
               },
             });
           }
-        }
-        else if ( type === "forget-password") {
-           const user = await prisma.user.findUnique({
+        } else if (type === "forget-password") {
+          const user = await prisma.user.findUnique({
             where: {
               email,
             },
           });
 
-          if (user){
+          if (user) {
             sendEmail({
               to: email,
               subject: "Password Reset OTP",
@@ -99,12 +119,9 @@ export const auth = betterAuth({
             });
           }
         }
-
-
       },
-       expiresIn: 2 * 60, // 2 minutes in second 
-       otpLength: 6,
-
+      expiresIn: 2 * 60, // 2 minutes in second
+      otpLength: 6,
     }),
   ],
 
@@ -117,9 +134,32 @@ export const auth = betterAuth({
     },
   },
 
-  //  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5001"],
+  redirectURLs: {
+    signIn: `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success`,
+  },
 
-  // advanced: {
-  //     disableCSRFCheck: true,
-  // }
+   trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5001"],
+
+  advanced: {
+    // disableCSRFCheck: true,
+    useSecureCookies: false,
+    cookies: {
+      state: {
+        attributes: {
+          sameSite: "none",
+          secure: true,
+          httpOnly: true,
+          path: "/",
+        },
+      },
+      sessionToken: {
+        attributes: {
+          sameSite: "none",
+          secure: true,
+          httpOnly: true,
+          path: "/",
+        },
+      },
+    },
+  },
 });
