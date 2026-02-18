@@ -6,8 +6,9 @@ import status from "http-status";
 import { tokenUtils } from "../../utils/token";
 import AppError from "../../errorHelpers/AppError";
 import { CookieUtils } from "../../utils/cookie";
-import { envVars } from "../../../config/env";
+
 import { auth } from "../../lib/auth";
+import { envVars } from "../../config/env";
 
 
 

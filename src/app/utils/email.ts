@@ -5,7 +5,8 @@ import nodemailer from "nodemailer";
 import path from "path";
 
 import AppError from "../errorHelpers/AppError";
-import { envVars } from "../../config/env";
+import { envVars } from "../config/env";
+
 
 
 

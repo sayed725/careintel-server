@@ -7,7 +7,8 @@ import { prisma } from "../lib/prisma";
 import { CookieUtils } from "../utils/cookie";
 import { jwtUtils } from "../utils/jwt";
 import { Role, UserStatus } from "../../generated/enums";
-import { envVars } from "../../config/env";
+import { envVars } from "../config/env";
+
 
 export const checkAuth = (...authRoles: Role[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {

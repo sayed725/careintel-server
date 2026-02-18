@@ -7,7 +7,7 @@ import { tokenUtils } from "../../utils/token";
 import { IChangePasswordPayload, ILoginUserPayload, IRegisterPatientPayload } from "./auth.interface";
 import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { jwtUtils } from "../../utils/jwt";
-import { envVars } from "../../../config/env";
+import { envVars } from "../../config/env";
 import { JwtPayload } from "jsonwebtoken";
 
 
