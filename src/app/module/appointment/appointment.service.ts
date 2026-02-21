@@ -4,10 +4,11 @@ import AppError from "../../errorHelpers/AppError";
 import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { prisma } from "../../lib/prisma";
 import { IBookAppointmentPayload } from "./appointment.interface";
-import { uuidv7 } from "zod/mini";
+// import { uuidv7 } from "zod/mini";
+
 import { envVars } from "../../config/env";
 import { stripe } from "../../config/stripe.config";
-// import { v7 as uuidv7 } from "uuid";
+import { v7 as uuidv7 } from "uuid";
 
 // Pay Now Book Appointment
 const bookAppointment = async (
