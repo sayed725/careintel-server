@@ -6,16 +6,16 @@ import { RAGService } from "./rag.service";
 
 const ragService = new RAGService();
 
-// const getStats = catchAsync(async (req: Request, res: Response) => {
-//   const result = await ragService.getStats();
+const getStats = catchAsync(async (req: Request, res: Response) => {
+  const result = await ragService.getStats();
 
-//   sendResponse(res, {
-//     success: true,
-//     httpStatusCode: status.OK,
-//     message: "RAG stats retrieved successfully",
-//     data: result,
-//   });
-// });
+  sendResponse(res, {
+    success: true,
+    httpStatusCode: status.OK,
+    message: "RAG stats retrieved successfully",
+    data: result,
+  });
+});
 
 const ingestDoctors = catchAsync(async (req: Request, res: Response) => {
   const result = await ragService.ingestDoctorsData();
@@ -55,7 +55,7 @@ const queryRag = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const RagController = {
-//   getStats,
+  getStats,
   ingestDoctors,
   queryRag,
 };
