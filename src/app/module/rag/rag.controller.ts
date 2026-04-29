@@ -1,17 +1,21 @@
 import { Request, Response } from "express";
-import status from "http-status";
 import { catchAsync } from "../../shared/catchAsync";
-import { RAGService } from "./rag.service";
 import { sendResponse } from "../../shared/sendResponse";
+import status from "http-status";
+import { RAGService } from "./rag.service";
 
+const ragService = new RAGService();
 
-const ragService = new RAGService()
+// const getStats = catchAsync(async (req: Request, res: Response) => {
+//   const result = await ragService.getStats();
 
-
-const getStats = async (req: Request, res: Response) => {
-  console.log("connected", req.query);
-  res.status(200).json({ message: "connected rag apis" });
-};
+//   sendResponse(res, {
+//     success: true,
+//     httpStatusCode: status.OK,
+//     message: "RAG stats retrieved successfully",
+//     data: result,
+//   });
+// });
 
 const ingestDoctors = catchAsync(async (req: Request, res: Response) => {
   const result = await ragService.ingestDoctorsData();
@@ -24,7 +28,34 @@ const ingestDoctors = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const queryRag = catchAsync(async (req: Request, res: Response) => {
+  const { query, limit, sourceType } = req.body;
+
+  if (!query) {
+    return sendResponse(res, {
+      success: false,
+      httpStatusCode: status.BAD_REQUEST,
+      message: "Query is required",
+    });
+  }
+
+  const result = await ragService.generateAnswer(
+    query,
+    limit ?? 5,
+    sourceType,
+    true,
+  );
+
+  sendResponse(res, {
+    success: true,
+    httpStatusCode: status.OK,
+    message: "Answer generated successfully",
+    data: result,
+  });
+});
+
 export const RagController = {
-  getStats,
+//   getStats,
   ingestDoctors,
+  queryRag,
 };
